@@ -48,5 +48,14 @@ public class FilaEncadeada {
       {
           return ini.dado;
       }
+      
+      public void mostrar() {
+    	  NO aux = ini;
+    	  while(aux != null) {
+    		  System.out.println(aux.dado);
+    		  aux = aux.prox;
+    	  }
+      }
+      
 
 }
