@@ -2,9 +2,10 @@ package br.com.fiap.codigoaltaperformance.tabalho02.atendimento;
 
 public class FilaEncadeada {
       
+	
 	  private class NO
       {
-           int dado;
+           paciente dado;
            NO prox;
       }
 
@@ -21,7 +22,7 @@ public class FilaEncadeada {
           return ini == null && fim == null;
       }
 
-      public void enqueue(int elem)
+      public void enqueue(paciente elem)
       {
           NO novo = new NO();
           novo.dado = elem;
@@ -34,16 +35,16 @@ public class FilaEncadeada {
 
       }
 
-      public int dequeue()
+      public paciente dequeue()
       {
-          int v = ini.dado;
+          paciente v = ini.dado;
           ini = ini.prox;
           if (ini == null)
               fim = null;
           return v;
 
       }
-      public int first()
+      public paciente first()
       {
           return ini.dado;
       }
