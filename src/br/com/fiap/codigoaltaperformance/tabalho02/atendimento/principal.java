@@ -20,22 +20,25 @@ public class principal {
 		String nome;
 		long cpf;
 
-		/*
-		 * Tosse Febre Cansaço Dificuldade para respirar (em casos graves)
-		 */
+		// rotina para informar a quantidade de leitos
 		do {
 			System.out.println("Informe a quantidade de leitos");
 			opcao = teclado.nextInt();
 
 		} while (opcao < 0);
-
 		leitoInternacao = new long[opcao];
-		opcao = 0;
-		// teclado.next();
 
+		opcao = 0;
 		do {
-			System.out.println(
-					"Informe uma opção 0 - Sair, 1 - Colocar paciente na fila, 2 - Atender paciente, 3 - Aplicar alta para paciente");
+			System.out.print("|----------------------------------------|\n");
+			System.out.print("| Opção 0 - Sair                         |\n");
+			System.out.print("| Opção 1 - Colocar paciente na Fila     |\n");
+			System.out.print("| Opção 2 - Atender paciente             |\n");
+			System.out.print("| Opção 3 - Aplicar alta paciente        |\n");
+			System.out.print("| Opção 4 - Listar fila de atendimento   |\n");
+			System.out.print("| Opção 5 - Listar fila de internação    |\n");
+			System.out.print("|----------------------------------------|\n");
+			System.out.print("Digite uma opção: ");
 			opcao = teclado.nextInt();
 			switch (opcao) {
 			case 1:
@@ -56,11 +59,30 @@ public class principal {
 				System.out.println("Atender paciente da fila");
 				if (!filaAtendimento.isEmpty()) {
 					p = filaAtendimento.dequeue();
-					System.out.println("Informe o sintoma:\n" + ListSintomas(Estatico.sintomas));
-					int sintoma = teclado.nextInt();
-					p.setSintoma(sintoma);
+					int sintoma = 0;
+					String resposta = "N";
+					System.out.println("O paciente possui sintomas? (S/[N])");
+					resposta = teclado.next();
+					if (resposta.equalsIgnoreCase("S")) {
+						do {
+							System.out.println("Informe o sintoma:\n" + ListSintomas(Estatico.sintomas));
+							sintoma = teclado.nextInt();
+							if (sintoma != 0)
+								p.getSintoma().enqueue(Estatico.sintomas[sintoma]);
 
-					if (p.getSintoma() > 0) {
+							System.out.println("Deseja listar os sintomas do paciente? (S/[N])");
+							resposta = teclado.next();
+							if (resposta.equalsIgnoreCase("S")) {
+								p.getSintoma().mostrar();
+							}
+
+							System.out.println("Deseja informar mais sintomas? (S/[N])");
+							resposta = teclado.next();
+
+						} while (sintoma == 0 || resposta.equalsIgnoreCase("S"));
+					}
+
+					if (!p.getSintoma().isEmpty()) {
 						boolean havagas = false;
 						for (int i = 0; i < leitoInternacao.length; i++) {
 							if (leitoInternacao[i] == 0) {
@@ -80,8 +102,6 @@ public class principal {
 					} else {
 						System.out.println("Paciente: " + p + ". Será liberado");
 					}
-
-					// System.out.println("O paciente a ser atendido: " + p);
 				} else {
 					System.out.println("Não tem pacientes na fila");
 
@@ -114,16 +134,26 @@ public class principal {
 				}
 
 				break;
+			case 4:
+				System.out.println("Listando fila de Atendimento");
+				filaAtendimento.mostrar();
+				System.out.println();
+				break;
+			case 5:
+				System.out.println("Listando fila de Internação");
+				filaInternacao.mostrar();
+				System.out.println();
+				break;
 			default:
+			case 0:
 				if (!filaAtendimento.isEmpty()) {
-					System.out.println("Há pacientes na fila, deseja");
+					System.out.println("Há pacientes na fila, deseja listá-los");
 					while (!filaAtendimento.isEmpty()) {
 						System.out.println(filaAtendimento.dequeue());
 					}
+
 				}
-
 				opcao = 0;
-
 			}
 		} while (opcao > 0);
 
@@ -131,7 +161,6 @@ public class principal {
 	}
 
 	private static String ListSintomas(String[] sintomas) {
-		// TODO Auto-generated method stub
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < sintomas.length; i++) {
 			sb.append(i + " - " + sintomas[i] + "\n");
